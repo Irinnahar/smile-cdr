@@ -1,0 +1,70 @@
+<div class="container card mt-5 p-5 mb-5">
+  <form
+    class="g-3 needs-validation"
+    [formGroup]="myForm"
+    (ngSubmit)="submitForm()"
+  >
+    <div class="mb-3" *ngFor="let control of jsonFormData.item">
+      <label class="form-label"
+        >{{ control.text }}
+        <span class="text-danger">*</span>
+      </label>
+      <div [ngSwitch]="control.type">
+        <div *ngSwitchCase="'string'">
+          <input
+            type="text"
+            class="form-control"
+            [formControlName]="control.text"
+            [value]="control.value"
+          />
+        </div>
+
+        <input
+          *ngSwitchCase="'date'"
+          [formControlName]="control.text"
+          type="date"
+          class="form-control"
+        />
+        <select
+          *ngSwitchCase="'choice'"
+          class="form-select"
+          aria-label="select form control"
+          [formControlName]="control.text"
+        >
+          <option [ngValue]="null" selected>Select Option</option>
+          <option
+            *ngFor="let opt of control.option"
+            [ngValue]="opt.valueCoding.code"
+          >
+            {{ opt.valueCoding.display }}
+          </option>
+        </select>
+        <div *ngSwitchCase="'boolean'">
+          <input
+            type="radio"
+            value="True"
+            [name]="control.text"
+            [formControlName]="control.text"
+          />
+          Yes
+          <input
+            type="radio"
+            value="False"
+            [name]="control.text"
+            [formControlName]="control.text"
+          />
+          No
+        </div>
+      </div>
+    </div>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="!this.myForm.valid"
+    >
+      Submit
+    </button>
+  </form>
+
+  <app-form-details [formValue]="formValue"></app-form-details>
+</div>
